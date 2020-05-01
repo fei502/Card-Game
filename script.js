@@ -86,6 +86,7 @@ function generateCard() {
     const card = cards.splice(index, 1)[0];
     game.gameBoard.appendChild(card);
   }
+  
 }
 
 function createCardElement(tech) {
@@ -118,12 +119,12 @@ function handleCardFlip() {
   console.log(thisCard)
   thisCard.classList.add('card--flipped')
   if(game.preCard !== null){
+    checkMatchingCard(thisCard, game.preCard);
     unBindAllCardClick();
     setTimeout(()=>{
       bindCardClick();
-    }, 1500);
+    }, 1000);
     console.log('youle');
-    checkMatchingCard(thisCard, game.preCard)
     return;
   }
   game.preCard = thisCard;
@@ -134,6 +135,7 @@ function checkMatchingCard(card1, card2){
     updateScore();
     unBindCardClick(card1);
     unBindCardClick(card2);
+    game.timer += 2;
     game.preCard = null;
     game.matchCard += 2;
     if(game.matchCard === game.totalCards){
@@ -146,7 +148,7 @@ function checkMatchingCard(card1, card2){
       card1.classList.remove('card--flipped');
       card2.classList.remove('card--flipped');
       game.preCard = null;
-    }, 1500);
+    }, 1000);
   }
 }
 
@@ -158,6 +160,9 @@ function nextLevel() {
     game.levelDisplay.innerHTML = game.level;
     generateCard();
     bindCardClick();
+    if(game.level == 4){
+      handleGameOver();
+    }
   }, 1500);
 }
 
@@ -172,7 +177,6 @@ function handleGameOver() {
   alert('Game Over!\nYour final score is: ' + game.score);
   game.startButton.innerHTML = "New Game";
   clearInterval(game.timerInterval);
-  clearBoard();
   game.gameOver = true;
 }
 
@@ -180,7 +184,7 @@ function handleGameOver() {
 /     UI update
 /******************************************/
 function updateScore() {
-  game.score += 10;
+  game.score = game.score+Math.pow(game.level,2)*game.timer;
   game.scoreDisplay.innerHTML = game.score;
 }
 
