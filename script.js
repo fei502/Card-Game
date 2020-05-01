@@ -111,20 +111,14 @@ function handleCardFlip() {
   }
   const thisCard = this;
   if(thisCard === game.preCard){
-    console.log('hhh');
     thisCard.classList.remove('card--flipped');
     game.preCard = null;
     return;
   }
   console.log(thisCard)
   thisCard.classList.add('card--flipped')
-  if(game.preCard !== null){
+  if(game.preCard){
     checkMatchingCard(thisCard, game.preCard);
-    unBindAllCardClick();
-    setTimeout(()=>{
-      bindCardClick();
-    }, 1000);
-    console.log('youle');
     return;
   }
   game.preCard = thisCard;
@@ -135,8 +129,8 @@ function checkMatchingCard(card1, card2){
     updateScore();
     unBindCardClick(card1);
     unBindCardClick(card2);
-    game.timer += 2;
     game.preCard = null;
+    game.timer += 2;
     game.matchCard += 2;
     if(game.matchCard === game.totalCards){
       game.matchCard = 0;
@@ -144,10 +138,12 @@ function checkMatchingCard(card1, card2){
       nextLevel();
     }
   }else{
+    game.checkMatching = true;
     setTimeout(()=>{
       card1.classList.remove('card--flipped');
       card2.classList.remove('card--flipped');
       game.preCard = null;
+      game.checkMatching = false;
     }, 1000);
   }
 }
@@ -174,8 +170,8 @@ function setTimeBarBack(){
 }
 
 function handleGameOver() {
-  alert('Game Over!\nYour final score is: ' + game.score);
-  game.startButton.innerHTML = "New Game";
+  alert('Congratulations!\nYour final score is: ' + game.score);
+  game.startButton.innerHTML = "Start Game";
   clearInterval(game.timerInterval);
   game.gameOver = true;
 }
