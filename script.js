@@ -156,6 +156,10 @@ function nextLevel() {
     game.levelDisplay.innerHTML = game.level;
     generateCard();
     bindCardClick();
+    //For etmp.
+    if(game.level == 3){
+      game.timer = 90;
+    }
     if(game.level == 4){
       handleGameOver();
     }
